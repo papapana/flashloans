@@ -13,6 +13,7 @@ docs/
 # Dotenv file
 .env
 
-.vscode/
+node_modules/
+
 broadcast/
-node_modules
+.vscode/
