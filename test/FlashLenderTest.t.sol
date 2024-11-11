@@ -115,7 +115,7 @@ contract FlashLenderTest is Test {
         address[] memory lenderTokens = flashLender.getTokensSupported();
         MockFlashBorrower receiver = new MockFlashBorrower();
         MockFlashBorrower.Action action = MockFlashBorrower.Action.NORMAL;
-        
+
         // get more than allowed
         vm.expectRevert();
         flashLender.flashLoan(receiver, lenderTokens[0], LENDER_CONTRACT_AMOUNT + 1, abi.encode(action));
@@ -125,7 +125,7 @@ contract FlashLenderTest is Test {
         vm.prank(address(receiver));
         vm.expectRevert();
         flashLender.flashLoan(receiver, lenderTokens[0], LENDER_CONTRACT_AMOUNT, abi.encode(action));
-        
+
         // Now fund the borrrower
         vm.prank(flashLender.getOwner());
         IERC20(lenderTokens[0]).transfer(address(receiver), WITHDRAWAL_AMOUNT);

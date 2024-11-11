@@ -6,7 +6,6 @@ import {FlashBorrower} from "../src/contracts/FlashBorrower.sol";
 
 contract DeployFlashBorrower is Script {
     function run() external returns (FlashBorrower) {
-        
         vm.startBroadcast();
         // Here we spend gas
         FlashBorrower borrower = new FlashBorrower();

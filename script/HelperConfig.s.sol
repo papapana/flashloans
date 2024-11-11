@@ -23,7 +23,6 @@ contract HelperConfig is Script {
     error HelperConfig__InvalidChainId();
     //
 
-
     NetworkConfig localNetworkConfig;
 
     mapping(uint256 => NetworkConfig) networkConfig;
@@ -35,10 +34,11 @@ contract HelperConfig is Script {
         networkConfig[ETH_SEPOLIA_CHAIN_ID] = getSepoliaConfig();
     }
 
-    function getConfigByChainId(uint256 chainId) public returns(NetworkConfig memory) {
-        if(networkConfig[chainId].usdContract != address(0)) { // exists in dictionary
+    function getConfigByChainId(uint256 chainId) public returns (NetworkConfig memory) {
+        if (networkConfig[chainId].usdContract != address(0)) {
+            // exists in dictionary
             return networkConfig[chainId];
-        } else if(chainId==LOCAL_CHAIN_ID) {
+        } else if (chainId == LOCAL_CHAIN_ID) {
             return getOrCreateAnvilEthConfig();
         } else {
             revert HelperConfig__InvalidChainId();
@@ -83,9 +83,9 @@ contract HelperConfig is Script {
             return localNetworkConfig;
         }
         vm.startBroadcast();
-        USDC mockUSD = new USDC(1_000_000_000*10**18);
-        WETH mockWETH = new WETH(1_000_000_000*10**18);
-        WBTC mockWBTC = new WBTC(1_000_000_000*10**18);
+        USDC mockUSD = new USDC(1_000_000_000 * 10 ** 18);
+        WETH mockWETH = new WETH(1_000_000_000 * 10 ** 18);
+        WBTC mockWBTC = new WBTC(1_000_000_000 * 10 ** 18);
         vm.stopBroadcast();
         localNetworkConfig = NetworkConfig({
             usdContract: address(mockUSD),
@@ -95,4 +95,3 @@ contract HelperConfig is Script {
         return localNetworkConfig;
     }
 }
-

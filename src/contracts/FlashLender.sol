@@ -107,19 +107,19 @@ contract FlashLender is IERC3156FlashLender {
         onlySupportedToken(token)
         returns (bool)
     {
-        if(amount > _maxFlashLoan(token)) revert LoanAmountTooBig(amount);
+        if (amount > _maxFlashLoan(token)) revert LoanAmountTooBig(amount);
         IERC20 _token = IERC20(token);
         // Do the transfer
         bool sent = _token.transfer(msg.sender, amount);
-        if(!sent) revert FlashLoanNotSent();
+        if (!sent) revert FlashLoanNotSent();
         uint256 fee = _flashFee(token, amount);
         // Call onFlashLoan
         bytes32 borrowed = receiver.onFlashLoan(msg.sender, token, amount, fee, data);
-        if(borrowed != BORROW_SUCCESS) revert BorrowerDoesNotFollowProtocol();
+        if (borrowed != BORROW_SUCCESS) revert BorrowerDoesNotFollowProtocol();
         // Ensure funds + fee are returned
         uint256 amountToReturn = amount + fee;
         bool received = _token.transferFrom(msg.sender, address(this), amountToReturn);
-        if(!received) revert FlashLoanFailed();
+        if (!received) revert FlashLoanFailed();
         emit FlashLoanSuccessful(receiver, token, amount);
         return true;
     }
@@ -127,20 +127,20 @@ contract FlashLender is IERC3156FlashLender {
     function withdraw(IERC20 token, uint256 amount) external onlyOwner {
         if (amount == 0) revert ZeroWithdrawalAmount();
         uint256 balance = token.balanceOf(address(this));
-        if(amount > balance) revert NotEnoughBalanceToWithdraw();
+        if (amount > balance) revert NotEnoughBalanceToWithdraw();
         bool sent = token.transfer(OWNER, amount);
-        if(!sent) revert WithdrawalFailed();
+        if (!sent) revert WithdrawalFailed();
     }
 
-    function getTokensSupported() external view returns(address[] memory) {
+    function getTokensSupported() external view returns (address[] memory) {
         return tokensSupported;
     }
 
-    function isTokenSupported(address token) external view returns(bool) {
+    function isTokenSupported(address token) external view returns (bool) {
         return tokenSupported[token];
     }
 
-    function getOwner() external view returns(address) {
+    function getOwner() external view returns (address) {
         return OWNER;
     }
 }

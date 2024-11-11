@@ -16,4 +16,3 @@ contract DeployFlashLender is Script {
         return (lender, networkConfig);
     }
 }
-
