@@ -2,22 +2,18 @@
 pragma solidity 0.8.18;
 
 import {IERC20} from "@openzeppelin/contracts/interfaces/IERC20.sol";
-import {IERC3156FlashBorrower} from "../interfaces/IERC3156FlashBorrower.sol";
-import {IERC3156FlashLender} from "../interfaces/IERC3156FlashLender.sol";
+import {IERC3156FlashBorrower} from "../../interfaces/IERC3156FlashBorrower.sol";
+import {IERC3156FlashLender} from "../../interfaces/IERC3156FlashLender.sol";
 
-contract FlashBorrower is IERC3156FlashBorrower {
+abstract contract FlashBorrower is IERC3156FlashBorrower {
     address private immutable OWNER;
     IERC3156FlashLender private lender;
-
-    enum Action {
-        NORMAL,
-        OTHER
-    }
 
     // errors
     error BorrowingFailed();
     error OnlyLenderCanCallOnFlashLoan();
     error WrongInitiator();
+    error BorrowingActionsFailed();
     //
 
     constructor() {
@@ -35,19 +31,19 @@ contract FlashBorrower is IERC3156FlashBorrower {
         if (!borrowed) revert BorrowingFailed();
     }
 
+    function act(address initiator, address token, uint256 amount, uint256 fee, bytes calldata data)
+        internal
+        virtual
+        returns (bool);
+
     function onFlashLoan(address initiator, address token, uint256 amount, uint256 fee, bytes calldata data)
         external
         returns (bytes32)
     {
         if (msg.sender != address(lender)) revert OnlyLenderCanCallOnFlashLoan();
         if (initiator != address(this)) revert WrongInitiator();
-        (Action action) = abi.decode(data, (Action));
-        // Do stuff with the borrowed token
-        if (action == Action.NORMAL) {
-            // do normal stuff
-        } else {
-            // do other stuff
-        }
+        bool actionsSuccess = act(initiator, token, amount, fee, data);
+        if (!actionsSuccess) revert BorrowingActionsFailed();
         return keccak256("ERC3156FlashBorrower.onFlashLoan");
     }
 }

@@ -10,6 +10,8 @@ fs_permissions = [{ access = "read", path = "./broadcast" }]
 
 remappings = ["@openzeppelin/=lib/openzeppelin-contracts/", "@uniswap-v2-core=lib/v2-core/"]
 solc = "0.8.18"
+
+ignored_warnings_from = ["test/mock"]
 compiler_warnings=["all"]
 
 [etherscan]
