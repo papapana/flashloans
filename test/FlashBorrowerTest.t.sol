@@ -8,20 +8,20 @@ import {FlashLender} from "../src/contracts/FlashLender.sol";
 import {DeployFlashLender} from "../script/DeployFlashLender.s.sol";
 import {HelperConfig, NetworkConfig} from "../script/HelperConfig.s.sol";
 
-
-
-
 contract DummyFlashBorrower is FlashBorrower {
     enum Action {
         NORMAL,
         OTHER
     }
 
-    function act(address initiator, address token, uint256 amount, uint256 fee, bytes calldata data) internal override returns(bool) {
+    function act(address initiator, address token, uint256 amount, uint256 fee, bytes calldata data)
+        internal
+        override
+        returns (bool)
+    {
         return true;
     }
 }
-
 
 contract FlashBorrowerTest is Test {
     FlashBorrower flashBorrower;

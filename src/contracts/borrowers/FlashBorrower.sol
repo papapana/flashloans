@@ -31,7 +31,10 @@ abstract contract FlashBorrower is IERC3156FlashBorrower {
         if (!borrowed) revert BorrowingFailed();
     }
 
-    function act(address initiator, address token, uint256 amount, uint256 fee, bytes calldata data) internal virtual returns(bool);
+    function act(address initiator, address token, uint256 amount, uint256 fee, bytes calldata data)
+        internal
+        virtual
+        returns (bool);
 
     function onFlashLoan(address initiator, address token, uint256 amount, uint256 fee, bytes calldata data)
         external
