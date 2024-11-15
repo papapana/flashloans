@@ -126,7 +126,7 @@ contract FlashLenderTest is Test {
         vm.expectRevert();
         flashLender.flashLoan(receiver, lenderTokens[0], LENDER_CONTRACT_AMOUNT, abi.encode(action));
 
-        // Now fund the borrrower
+        // Now fund the borrower
         vm.prank(flashLender.getOwner());
         IERC20(lenderTokens[0]).transfer(address(receiver), WITHDRAWAL_AMOUNT);
         address token = lenderTokens[0];
