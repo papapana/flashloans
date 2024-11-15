@@ -36,9 +36,7 @@ contract LiquidityProvisionExample is Script {
         console.log("sender in liquidity:", msg.sender);
         console.log("address(this) in liquidity", address(this));
 
-        // IERC20(_tokenA).transferFrom(msg.sender, address(this), _amountA);
-        // IERC20(_tokenB).transferFrom(msg.sender, address(this), _amountB);
-        IERC20(_tokenA).approve(ROUTER, _amountA);
+         IERC20(_tokenA).approve(ROUTER, _amountA);
         IERC20(_tokenB).approve(ROUTER, _amountB);
         (uint256 amountA, uint256 amountB, uint256 liquidity) = IUniswapV2Router02(ROUTER).addLiquidity(
             _tokenA, _tokenB, _amountA, _amountB, 1, 1, address(this), block.timestamp + 10 minutes
@@ -56,8 +54,6 @@ contract LiquidityProvisionExample is Script {
         console.log("address(this) here", address(this));
 
         vm.startBroadcast();
-        // IERC20(WETH).approve(address(this), LIQUIDITY_AMOUNT);
-        // IERC20(WBTC).approve(address(this), LIQUIDITY_AMOUNT);
         (uint256 amountA, uint256 amountB, uint256 liquidity) =
             addLiquidity(WETH, WBTC, LIQUIDITY_AMOUNT, LIQUIDITY_AMOUNT);
 

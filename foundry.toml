@@ -14,9 +14,6 @@ solc = "0.8.18"
 ignored_warnings_from = ["test/mock"]
 compiler_warnings=["all"]
 
-# [profile.coverage]
-# exclude = ["script/*", "test/mock/*"]
-
 [etherscan]
 mainnet = { key = "${ETHERSCAN_API_KEY}" }
 sepolia = { key = "${ETHERSCAN_API_KEY}" }
