@@ -113,11 +113,11 @@ contract FlashLender is IERC3156FlashLender {
         bool sent = _token.transfer(msg.sender, amount);
         if (!sent) revert FlashLoanNotSent();
         uint256 fee = _flashFee(token, amount);
+        uint256 amountToReturn = amount + fee;
         // Call onFlashLoan
         bytes32 borrowed = receiver.onFlashLoan(msg.sender, token, amount, fee, data);
         if (borrowed != BORROW_SUCCESS) revert BorrowerDoesNotFollowProtocol();
         // Ensure funds + fee are returned
-        uint256 amountToReturn = amount + fee;
         bool received = _token.transferFrom(msg.sender, address(this), amountToReturn);
         if (!received) revert FlashLoanFailed();
         emit FlashLoanSuccessful(receiver, token, amount);

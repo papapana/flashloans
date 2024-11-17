@@ -89,7 +89,10 @@ contract HelperConfig is Script {
 
     function getOrCreateAnvilEthConfig() public returns (NetworkConfig memory) {
         // Check to see if we set an active network config
-        if (localNetworkConfig.usdContract != address(0)) {
+        if (
+            (localNetworkConfig.usdContract != address(0)) && (localNetworkConfig.wethContract != address(0))
+                && (localNetworkConfig.wbtcContract != address(0))
+        ) {
             return localNetworkConfig;
         }
         vm.startBroadcast();
@@ -102,8 +105,8 @@ contract HelperConfig is Script {
             // wethContract: 0x610178dA211FEF7D417bC0e6FeD39F05609AD788,
             wethContract: address(mockWETH),
             wbtcContract: address(mockWBTC),
-            uniswapFactory: 0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e,
-            uniswapRouter: 0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82
+            uniswapFactory: 0x5FbDB2315678afecb367f032d93F642f64180aa3,
+            uniswapRouter: 0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0
         });
         return localNetworkConfig;
     }
