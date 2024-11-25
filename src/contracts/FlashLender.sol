@@ -5,6 +5,7 @@ import {IERC20} from "@openzeppelin/contracts/interfaces/IERC20.sol";
 import {IERC3156FlashBorrower} from "../interfaces/IERC3156FlashBorrower.sol";
 import {IERC3156FlashLender} from "../interfaces/IERC3156FlashLender.sol";
 
+
 contract FlashLender is IERC3156FlashLender {
     uint256 private constant DEFAULT_FEE = 1; // 0.01%
     uint256 private constant DECIMALS = 10000;
