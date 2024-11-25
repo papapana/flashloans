@@ -13,8 +13,6 @@ contract FlashLender is IERC3156FlashLender {
 
     mapping(address => bool) private tokenSupported;
     mapping(address => uint256) private feePercentage;
-    // mapping(address => uint256) private feesAccrued;
-    // uint256 private feesBalance;
     address[] private tokensSupported;
     address private immutable OWNER;
 
@@ -49,6 +47,12 @@ contract FlashLender is IERC3156FlashLender {
         OWNER = msg.sender;
     }
 
+    /**
+     * @notice Adds multiple tokens to the list of supported tokens
+     * @dev Only the owner can call this function
+     * @param tokens An array of token addresses to be added as supported tokens
+     * @custom:throws AddressShouldBeSmartContract if any of the token addresses is not a contract
+     */
     function addSupportedTokens(address[] memory tokens) external onlyOwner {
         for (uint256 i = 0; i < tokens.length; i++) {
             if (!tokenSupported[tokens[i]]) {
@@ -70,11 +74,22 @@ contract FlashLender is IERC3156FlashLender {
         }
     }
 
+    /**
+     * @notice Removes a token from the list of supported tokens
+     * @dev Only the owner can call this function, and the token must be currently supported
+     * @param token The address of the token to be removed
+     */
     function removeToken(address token) external onlyOwner onlySupportedToken(token) {
         delete tokenSupported[token];
         _deleteToken(token);
     }
 
+    /**
+     * @notice Adds a custom fee for a specific token
+     * @dev Only the owner can call this function, and the token must be currently supported
+     * @param token The address of the token for which to set a custom fee
+     * @param fee The new fee to be set for the token
+     */
     function addCustomFee(address token, uint256 fee) external onlyOwner onlySupportedToken(token) {
         feePercentage[token] = fee;
     }
@@ -83,6 +98,11 @@ contract FlashLender is IERC3156FlashLender {
         return IERC20(token).balanceOf(address(this));
     }
 
+    /**
+     * @dev The amount of currency available to be lent.
+     * @param token The loan currency.
+     * @return The amount of `token` that can be borrowed.
+     */
     function maxFlashLoan(address token) external view override onlySupportedToken(token) returns (uint256) {
         return _maxFlashLoan(token);
     }
@@ -91,6 +111,12 @@ contract FlashLender is IERC3156FlashLender {
         return (feePercentage[token] * amount) / DECIMALS;
     }
 
+    /**
+     * @dev The fee to be charged for a given loan.
+     * @param token The loan currency.
+     * @param amount The amount of tokens lent.
+     * @return The amount of `token` to be charged for the loan, on top of the returned principal.
+     */
     function flashFee(address token, uint256 amount)
         external
         view
@@ -101,6 +127,13 @@ contract FlashLender is IERC3156FlashLender {
         return _flashFee(token, amount);
     }
 
+    /**
+     * @dev Initiate a flash loan.
+     * @param receiver The receiver of the tokens in the loan, and the receiver of the callback.
+     * @param token The loan currency.
+     * @param amount The amount of tokens lent.
+     * @param data Arbitrary data structure, intended to contain user-defined parameters.
+     */
     function flashLoan(IERC3156FlashBorrower receiver, address token, uint256 amount, bytes calldata data)
         external
         override
@@ -124,6 +157,12 @@ contract FlashLender is IERC3156FlashLender {
         return true;
     }
 
+    /**
+     * @notice Allows the owner to withdraw tokens from the contract
+     * @dev Only the owner can call this function
+     * @param token The ERC20 token to withdraw
+     * @param amount The amount of tokens to withdraw
+     */
     function withdraw(IERC20 token, uint256 amount) external onlyOwner {
         if (amount == 0) revert ZeroWithdrawalAmount();
         uint256 balance = token.balanceOf(address(this));
@@ -132,14 +171,27 @@ contract FlashLender is IERC3156FlashLender {
         if (!sent) revert WithdrawalFailed();
     }
 
+    /**
+     * @notice Returns an array of all supported token addresses
+     * @return An array of addresses representing the supported tokens
+     */
     function getTokensSupported() external view returns (address[] memory) {
         return tokensSupported;
     }
 
+    /**
+     * @notice Checks if a given token is supported by the contract
+     * @param token The address of the token to check
+     * @return A boolean indicating whether the token is supported (true) or not (false)
+     */
     function isTokenSupported(address token) external view returns (bool) {
         return tokenSupported[token];
     }
 
+    /**
+     * @notice Returns the address of the contract owner
+     * @return The address of the owner
+     */
     function getOwner() external view returns (address) {
         return OWNER;
     }
