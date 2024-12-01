@@ -16,11 +16,13 @@ struct NetworkConfig {
 
 contract HelperConfig is Script {
     uint256 public constant ETH_SEPOLIA_CHAIN_ID = 11155111;
-    uint256 public constant HEDERA_TESTNET_CHIAN_ID=296;
+    uint256 public constant HEDERA_TESTNET_CHAIN_ID=296;
     uint256 public constant ETHEREUM_CHAIN_ID = 1;
     uint256 public constant LOCAL_CHAIN_ID = 31337;
     uint256 public constant UZH_CHAIN_ID = 702;
     uint256 public constant ARBITRUM_CHAIN_ID = 42161;
+    uint256 public constant BASE_CHAIN_ID = 8453;
+
 
     // errors
     error HelperConfig__InvalidChainId();
@@ -35,7 +37,8 @@ contract HelperConfig is Script {
         networkConfig[ETHEREUM_CHAIN_ID] = getEthereumConfig();
         networkConfig[ARBITRUM_CHAIN_ID] = getArbitrumConfig();
         networkConfig[ETH_SEPOLIA_CHAIN_ID] = getSepoliaConfig();
-        networkConfig[HEDERA_TESTNET_CHIAN_ID] = getHederaTestConfig();
+        networkConfig[HEDERA_TESTNET_CHAIN_ID] = getHederaTestConfig();
+        networkConfig[BASE_CHAIN_ID] = getBaseConfig();
     }
 
     function getConfigByChainId(uint256 chainId) public returns (NetworkConfig memory) {
@@ -47,6 +50,16 @@ contract HelperConfig is Script {
         } else {
             revert HelperConfig__InvalidChainId();
         }
+    }
+
+    function getBaseConfig() public pure returns (NetworkConfig memory) {
+        return NetworkConfig({
+            usdContract: 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913,
+            wethContract: 0x4200000000000000000000000000000000000006,
+            wbtcContract: 0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf,
+            uniswapRouter: 0x4752ba5DBc23f44D87826276BF6Fd6b1C372aD24,
+            uniswapFactory: 0x8909Dc15e40173Ff4699343b6eB8132c65e18eC6
+        });
     }
 
     function getHederaTestConfig() public pure returns (NetworkConfig memory) {

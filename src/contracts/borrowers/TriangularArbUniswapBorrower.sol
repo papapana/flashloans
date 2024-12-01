@@ -64,11 +64,6 @@ contract TriangularArbUniswapBorrower is FlashBorrower {
     {
         // Data should contain the beneficial owner, and 3 tokens for the triangular arbitrage
         (address bene, address[3] memory tokens) = abi.decode(data, (address, address[3]));
-        emit Debug("bene:", bene);
-        emit Debug("token[0]=", tokens[0]);
-        emit Debug("token[1]=", tokens[1]);
-        emit Debug("token[2]=", tokens[2]);
-        emit Debug("amount=", amount);
         for(uint8 i = 0; i < 3; i++){
             IERC20(tokens[i]).approve(address(UNISWAP_ROUTER), MAX_INT);
         }
