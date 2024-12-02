@@ -5,7 +5,7 @@ Also, there are multiple implementations of Flashborrowers.
 
 This repository was developed as part of my work towards the Certificate of Advanced Studies in Blockchain at the University of Zürich and is accompanied by a short thesis titled: "Flashloans and their applications on Ethereum-based blockchains".
 
-The smart contracts were tested locally, at the Sepolia Network and at the University of Zürich (UZH) Proof-of-Work Ethereum-based network. As part of my work I had to mine UZH Ethereum and also deploy Uniswap at the same network.
+The smart contracts were tested locally, at the Sepolia Network and at the University of Zürich (UZH) Proof-of-Work Ethereum-based network. As part of my work I had to mine UZH Ethereum and also deploy Uniswap at the same network. Also, I had to create situations where triangular arbitrage is possible.
 
 ## Instructions to run
 ### Locally
