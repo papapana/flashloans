@@ -16,13 +16,12 @@ struct NetworkConfig {
 
 contract HelperConfig is Script {
     uint256 public constant ETH_SEPOLIA_CHAIN_ID = 11155111;
-    uint256 public constant HEDERA_TESTNET_CHAIN_ID=296;
+    uint256 public constant HEDERA_TESTNET_CHAIN_ID = 296;
     uint256 public constant ETHEREUM_CHAIN_ID = 1;
     uint256 public constant LOCAL_CHAIN_ID = 31337;
     uint256 public constant UZH_CHAIN_ID = 702;
     uint256 public constant ARBITRUM_CHAIN_ID = 42161;
     uint256 public constant BASE_CHAIN_ID = 8453;
-
 
     // errors
     error HelperConfig__InvalidChainId();

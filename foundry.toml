@@ -14,6 +14,7 @@ solc = "0.8.18"
 
 ignored_warnings_from = ["test/mock"]
 compiler_warnings=["all"]
+no-match-path = "test/deprecated/*"
 
 [etherscan]
 mainnet = { key = "${ETHERSCAN_API_KEY}" }

@@ -4,7 +4,6 @@ pragma solidity ^0.8.18;
 import {IERC3156FlashLender} from "./IERC3156FlashLender.sol";
 import {IERC20} from "@openzeppelin/contracts/interfaces/IERC20.sol";
 
-
 interface IFLashLender is IERC3156FlashLender {
     function addSupportedTokens(address[] memory tokens) external;
     function removeToken(address token) external;

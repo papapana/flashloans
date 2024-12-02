@@ -27,8 +27,8 @@ contract AddArbitrageLiquidity is AddUniswapLiquidity {
 
         vm.startBroadcast();
         (uint256 amountA, uint256 amountB, uint256 liquidity) = addLiquidity(WETH, WBTC, WETH1_AMOUNT, WBTC1_AMOUNT);
-        (uint256 amountC, uint256 amountD, uint256 liquidity2) = addLiquidity(WBTC, USDC, WBTC2_AMOUNT, USDC1_AMOUNT);
-        (uint256 amountE, uint256 amountF, uint256 liquidity3) = addLiquidity(USDC, WETH, USDC2_AMOUNT, WETH2_AMOUNT);
+        addLiquidity(WBTC, USDC, WBTC2_AMOUNT, USDC1_AMOUNT);
+        addLiquidity(USDC, WETH, USDC2_AMOUNT, WETH2_AMOUNT);
 
         console.log("AmountA added:", amountA);
         console.log("AmountB added:", amountB);

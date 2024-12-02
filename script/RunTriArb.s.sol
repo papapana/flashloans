@@ -16,8 +16,6 @@ import {DeployTriangularArbUniswapBorrower} from "../script/DeployTriangularArbU
 import {TriangularArbUniswapBorrower} from "../src/contracts/borrowers/TriangularArbUniswapBorrower.sol";
 import {IFLashLender} from "../src/interfaces/IFlashLender.sol";
 
-
-
 contract RunTriArb is Script {
     // Create a triangular arbitrage opportunity
     address internal immutable FACTORY;
@@ -53,7 +51,6 @@ contract RunTriArb is Script {
         WBTC = networkConfig.wbtcContract;
         FLASHLENDER = 0xdDcbE46C653F6Bf9d2Ede5897CeEF9D178029D5B;
         BENE = 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266;
-
     }
 
     function run() external {
@@ -85,7 +82,6 @@ contract RunTriArb is Script {
         console.log("FlashLender balance usdc", IERC20(USDC).balanceOf(FLASHLENDER));
         console.log("FlashBorrower balance usdc", IERC20(USDC).balanceOf(address(triArbFlashBorrower)));
 
-
         console.log("address", msg.sender);
         console.log("address(this) here", address(this));
 
@@ -99,7 +95,7 @@ contract RunTriArb is Script {
         console.log("Pair 1 msg.sender balance:", IERC20(pair1).balanceOf(msg.sender));
         console.log("Pair 1 triarb balance:", IERC20(pair1).balanceOf(address(triArbFlashBorrower)));
         console.log("Pair 1 Router balance:", IERC20(pair1).balanceOf(ROUTER));
-        (uint112 reserve0, uint112 reserve1, ) = IUniswapV2Pair(pair1).getReserves();
+        (uint112 reserve0, uint112 reserve1,) = IUniswapV2Pair(pair1).getReserves();
         console.log("token 0 amount:", reserve0);
         console.log("token 1 amount:", reserve1);
         address[] memory path = new address[](2);
@@ -107,7 +103,6 @@ contract RunTriArb is Script {
         path[1] = newTokens[1];
         uint256 amountRequired = IUniswapV2Router01(ROUTER).getAmountsOut(10000, path)[1];
         console.log("amount required:", amountRequired);
-        
 
         // Add liquidity and token to FlashLender
 
@@ -123,7 +118,6 @@ contract RunTriArb is Script {
         // Give fee to Borrower
         uint256 fee = IFLashLender(FLASHLENDER).flashFee(lendedToken, LENDER_CONTRACT_AMOUNT);
         IERC20(lendedToken).transfer(address(triArbFlashBorrower), fee);
-
 
         // Execute the arbitrage
         triArbFlashBorrower.borrow(IFLashLender(FLASHLENDER), lendedToken, 10000, data);

@@ -3,13 +3,12 @@ pragma solidity ^0.8.18;
 
 import {Test, console} from "forge-std/Test.sol";
 import {IERC20} from "@openzeppelin/contracts/interfaces/IERC20.sol";
-import {TriangularArbUniswapBorrower} from "../src/contracts/borrowers/TriangularArbUniswapBorrower.sol";
-import {FlashLender} from "../src/contracts/FlashLender.sol";
-import {DeployFlashLender} from "../script/DeployFlashLender.s.sol";
-import {DeployTriangularArbUniswapBorrower} from "../script/DeployTriangularArbUniswapBorrower.s.sol";
-import {AddArbitrageLiquidity} from "../script/AddArbitrageLiquidity.s.sol";
-import {HelperConfig, NetworkConfig} from "../script/HelperConfig.s.sol";
-
+import {TriangularArbUniswapBorrower} from "../../src/contracts/borrowers/TriangularArbUniswapBorrower.sol";
+import {FlashLender} from "../../src/contracts/FlashLender.sol";
+import {DeployFlashLender} from "../../script/DeployFlashLender.s.sol";
+import {DeployTriangularArbUniswapBorrower} from "../../script/DeployTriangularArbUniswapBorrower.s.sol";
+import {AddArbitrageLiquidity} from "../../script/AddArbitrageLiquidity.s.sol";
+import {HelperConfig, NetworkConfig} from "../../script/HelperConfig.s.sol";
 
 contract TriangularFlashBorrowerTest is Test {
     TriangularArbUniswapBorrower triArbFlashBorrower;
