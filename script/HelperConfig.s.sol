@@ -16,10 +16,12 @@ struct NetworkConfig {
 
 contract HelperConfig is Script {
     uint256 public constant ETH_SEPOLIA_CHAIN_ID = 11155111;
+    uint256 public constant HEDERA_TESTNET_CHAIN_ID = 296;
     uint256 public constant ETHEREUM_CHAIN_ID = 1;
     uint256 public constant LOCAL_CHAIN_ID = 31337;
     uint256 public constant UZH_CHAIN_ID = 702;
     uint256 public constant ARBITRUM_CHAIN_ID = 42161;
+    uint256 public constant BASE_CHAIN_ID = 8453;
 
     // errors
     error HelperConfig__InvalidChainId();
@@ -34,6 +36,8 @@ contract HelperConfig is Script {
         networkConfig[ETHEREUM_CHAIN_ID] = getEthereumConfig();
         networkConfig[ARBITRUM_CHAIN_ID] = getArbitrumConfig();
         networkConfig[ETH_SEPOLIA_CHAIN_ID] = getSepoliaConfig();
+        networkConfig[HEDERA_TESTNET_CHAIN_ID] = getHederaTestConfig();
+        networkConfig[BASE_CHAIN_ID] = getBaseConfig();
     }
 
     function getConfigByChainId(uint256 chainId) public returns (NetworkConfig memory) {
@@ -45,6 +49,26 @@ contract HelperConfig is Script {
         } else {
             revert HelperConfig__InvalidChainId();
         }
+    }
+
+    function getBaseConfig() public pure returns (NetworkConfig memory) {
+        return NetworkConfig({
+            usdContract: 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913,
+            wethContract: 0x4200000000000000000000000000000000000006,
+            wbtcContract: 0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf,
+            uniswapRouter: 0x4752ba5DBc23f44D87826276BF6Fd6b1C372aD24,
+            uniswapFactory: 0x8909Dc15e40173Ff4699343b6eB8132c65e18eC6
+        });
+    }
+
+    function getHederaTestConfig() public pure returns (NetworkConfig memory) {
+        return NetworkConfig({
+            usdContract: 0x3e26546fa8922543291B038d5aC4b0dC2e01BcD1,
+            wethContract: 0xA50C799d60e79A5f8A5590B6093A8887389DB062,
+            wbtcContract: 0xe6E6177De0563b6aac20233F894D5138F06d7867,
+            uniswapRouter: 0x27930412f44fe0183595b9A0dD6AF9C04ed103e6,
+            uniswapFactory: 0x6C2Df876b79843645bba1c1D6d978cC6feEcd04B
+        });
     }
 
     function getUZHETHConfig() public pure returns (NetworkConfig memory) {
@@ -89,7 +113,10 @@ contract HelperConfig is Script {
 
     function getOrCreateAnvilEthConfig() public returns (NetworkConfig memory) {
         // Check to see if we set an active network config
-        if (localNetworkConfig.usdContract != address(0)) {
+        if (
+            (localNetworkConfig.usdContract != address(0)) && (localNetworkConfig.wethContract != address(0))
+                && (localNetworkConfig.wbtcContract != address(0))
+        ) {
             return localNetworkConfig;
         }
         vm.startBroadcast();
@@ -102,8 +129,8 @@ contract HelperConfig is Script {
             // wethContract: 0x610178dA211FEF7D417bC0e6FeD39F05609AD788,
             wethContract: address(mockWETH),
             wbtcContract: address(mockWBTC),
-            uniswapFactory: 0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e,
-            uniswapRouter: 0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82
+            uniswapFactory: 0x5FbDB2315678afecb367f032d93F642f64180aa3,
+            uniswapRouter: 0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0
         });
         return localNetworkConfig;
     }

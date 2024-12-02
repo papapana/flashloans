@@ -2,6 +2,7 @@
 src = "src"
 out = "out"
 libs = ["lib"]
+ffi = true
 
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
 
@@ -13,6 +14,7 @@ solc = "0.8.18"
 
 ignored_warnings_from = ["test/mock"]
 compiler_warnings=["all"]
+no-match-path = "test/deprecated/*"
 
 [etherscan]
 mainnet = { key = "${ETHERSCAN_API_KEY}" }

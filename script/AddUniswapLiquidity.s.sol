@@ -9,13 +9,13 @@ import {IUniswapV2Factory} from "../src/interfaces/IUniswapV2Factory.sol";
 import {IUniswapV2Pair} from "../src/interfaces/IUniswapV2Pair.sol";
 import {IERC20} from "@openzeppelin/contracts/interfaces/IERC20.sol";
 
-contract LiquidityProvisionExample is Script {
-    address private immutable FACTORY;
-    address private immutable ROUTER;
-    address private immutable WETH;
-    address private immutable USDC;
-    address private immutable WBTC;
-    uint256 private constant LIQUIDITY_AMOUNT = 2 ether;
+contract AddUniswapLiquidity is Script {
+    address internal immutable FACTORY;
+    address internal immutable ROUTER;
+    address internal immutable WETH;
+    address internal immutable USDC;
+    address internal immutable WBTC;
+    uint256 internal constant LIQUIDITY_AMOUNT = 2 ether;
 
     constructor() {
         HelperConfig helper = new HelperConfig();
@@ -33,6 +33,12 @@ contract LiquidityProvisionExample is Script {
         public
         returns (uint256, uint256, uint256)
     {
+        console.log("WETH address:", address(WETH));
+        console.log("USDC address:", address(USDC));
+        console.log("WBTC address:", address(WBTC));
+        console.log("Router address:", address(ROUTER));
+        console.log("Factory address:", address(FACTORY));
+
         console.log("sender in liquidity:", msg.sender);
         console.log("address(this) in liquidity", address(this));
 
@@ -47,7 +53,7 @@ contract LiquidityProvisionExample is Script {
         return (amountA, amountB, liquidity);
     }
 
-    function run() external {
+    function run() external virtual {
         console.log("balance weth", IERC20(WETH).balanceOf(msg.sender));
         console.log("balance wbtc", IERC20(WBTC).balanceOf(msg.sender));
         console.log("address", msg.sender);
