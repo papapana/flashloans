@@ -42,13 +42,7 @@ library UniswapUtilities {
         // Approve tokens for trade
         IERC20(fromToken).approve(address(router), amountIn);
 
-        uint256[] memory amounts = router.swapExactTokensForTokens(
-            amountIn,
-            amountRequired,
-            path,
-            recipient,
-            deadline
-        );
+        uint256[] memory amounts = router.swapExactTokensForTokens(amountIn, amountRequired, path, recipient, deadline);
 
         amountReceived = amounts[1];
         if (amountReceived == 0) revert TradeFailed();

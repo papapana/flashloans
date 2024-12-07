@@ -30,21 +30,9 @@ contract ArbUniswapBorrower is FlashBorrower {
         UNISWAP_ROUTER = IUniswapV2Router02(_uniswapRouter);
     }
 
-    function trade(
-        address fromToken,
-        address toToken,
-        uint256 amountIn
-    ) internal returns (uint256) {
-        return UniswapUtilities.placeTrade(
-            UNISWAP_FACTORY,
-            UNISWAP_ROUTER,
-            fromToken,
-            toToken,
-            amountIn,
-            msg.sender
-        );
+    function trade(address fromToken, address toToken, uint256 amountIn) internal returns (uint256) {
+        return UniswapUtilities.placeTrade(UNISWAP_FACTORY, UNISWAP_ROUTER, fromToken, toToken, amountIn, msg.sender);
     }
-
 
     function act(address, /*initiator*/ address, /*token*/ uint256 amount, uint256 fee, bytes calldata data)
         internal
@@ -66,7 +54,7 @@ contract ArbUniswapBorrower is FlashBorrower {
         for (uint8 i = 1; i < tokens.length; i++) {
             amount_ = trade(tokens[i], tokens[(i + 1) % tokens.length], amount_);
         }
-      
+
         if (amount_ <= amountFirst) revert TradeNotProfitable();
         // Now transfer the money to the beneficial owner --> the profits in tokens[0]
         // First get the amount to repay to subtract from the gains

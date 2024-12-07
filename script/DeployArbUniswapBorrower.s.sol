@@ -11,8 +11,7 @@ contract DeployArbUniswapBorrower is Script {
         NetworkConfig memory networkConfig = helper.getConfigByChainId(block.chainid);
         vm.startBroadcast();
         // Here we spend gas
-        ArbUniswapBorrower borrower =
-            new ArbUniswapBorrower(networkConfig.uniswapFactory, networkConfig.uniswapRouter);
+        ArbUniswapBorrower borrower = new ArbUniswapBorrower(networkConfig.uniswapFactory, networkConfig.uniswapRouter);
         vm.stopBroadcast();
         return (borrower, networkConfig);
     }

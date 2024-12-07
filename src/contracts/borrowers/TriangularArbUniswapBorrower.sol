@@ -29,21 +29,9 @@ contract TriangularArbUniswapBorrower is FlashBorrower {
         UNISWAP_ROUTER = IUniswapV2Router02(_uniswapRouter);
     }
 
-    function trade(
-        address fromToken,
-        address toToken,
-        uint256 amountIn
-    ) internal returns (uint256) {
-        return UniswapUtilities.placeTrade(
-            UNISWAP_FACTORY,
-            UNISWAP_ROUTER,
-            fromToken,
-            toToken,
-            amountIn,
-            msg.sender
-        );
+    function trade(address fromToken, address toToken, uint256 amountIn) internal returns (uint256) {
+        return UniswapUtilities.placeTrade(UNISWAP_FACTORY, UNISWAP_ROUTER, fromToken, toToken, amountIn, msg.sender);
     }
-
 
     function act(address, /*initiator*/ address, /*token*/ uint256 amount, uint256 fee, bytes calldata data)
         internal
