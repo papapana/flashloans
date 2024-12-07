@@ -11,7 +11,7 @@ import "./UniswapUtilities.sol";
 
 import {console} from "../../../lib/forge-std/src/Test.sol";
 
-contract TriangularArbUniswapBorrower is FlashBorrower {
+contract ArbUniswapBorrower is FlashBorrower {
     IUniswapV2Factory immutable UNISWAP_FACTORY;
     IUniswapV2Router02 immutable UNISWAP_ROUTER;
 
@@ -20,6 +20,7 @@ contract TriangularArbUniswapBorrower is FlashBorrower {
     error TradeFailed();
     error TradeNotProfitable();
     error GainsTransferFailed();
+    error AtLeastOnePairNeeded();
     //
 
     uint256 private constant MAX_INT = 115792089237316195423570985008687907853269984665640564039457584007913129639935;
@@ -51,19 +52,26 @@ contract TriangularArbUniswapBorrower is FlashBorrower {
         returns (bool)
     {
         // Data should contain the beneficial owner, and 3 tokens for the triangular arbitrage
-        (address bene, address[3] memory tokens) = abi.decode(data, (address, address[3]));
-        for (uint8 i = 0; i < 3; i++) {
+        (address bene, address[] memory tokens) = abi.decode(data, (address, address[]));
+        if (tokens.length < 2) revert AtLeastOnePairNeeded();
+
+        for (uint8 i = 0; i < tokens.length; i++) {
             IERC20(tokens[i]).approve(address(UNISWAP_ROUTER), MAX_INT);
         }
-        // Do the triangular arbitrage
+
         uint256 amountFirst = trade(tokens[0], tokens[1], amount);
-        uint256 amountSecond = trade(tokens[1], tokens[2], amountFirst);
-        uint256 finalReceived = trade(tokens[2], tokens[0], amountSecond);
-        if (finalReceived <= amountFirst) revert TradeNotProfitable();
+        uint256 amount_ = amountFirst;
+
+        // Do the arbitrage
+        for (uint8 i = 1; i < tokens.length; i++) {
+            amount_ = trade(tokens[i], tokens[(i + 1) % tokens.length], amount_);
+        }
+      
+        if (amount_ <= amountFirst) revert TradeNotProfitable();
         // Now transfer the money to the beneficial owner --> the profits in tokens[0]
         // First get the amount to repay to subtract from the gains
         uint256 amountToRepay = fee + amount;
-        uint256 gains = finalReceived - amountToRepay;
+        uint256 gains = amount_ - amountToRepay;
         bool sent = IERC20(tokens[0]).transfer(bene, gains);
         if (!sent) revert GainsTransferFailed();
         return true;
